@@ -1,3 +1,7 @@
+body {
+  user-select: none;
+}
+
 .viewer {
   width: 1000px;
   height: 600px;

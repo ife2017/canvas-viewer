@@ -4,8 +4,10 @@ class Thumbnail {
     this.$canvas = document.querySelector('.canvas-thumbnail')
     this.$canvas.width = canvasContext.canvas.width * scale
     this.$canvas.height = canvasContext.canvas.height * scale
-    this.indicatorWidth = Math.round(this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth)
-    this.indicatorHeight = Math.round(this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight)
+    this.indicatorWidth = Math.round(
+      this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth)
+    this.indicatorHeight = Math.round(
+      this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight)
     this.$indicator = document.querySelector('.indicator')
     this.$indicator.style.width = this.indicatorWidth + 'px'
     this.$indicator.style.height = this.indicatorHeight + 'px'
@@ -48,9 +50,9 @@ class Thumbnail {
     }))
   }
 
-  setPosition(x, y) {
-    this.$indicator.style.top = y * this.$canvas.height + 'px'
-    this.$indicator.style.left = x * this.$canvas.width + 'px'
+  setPosition(offsetX, offsetY) {
+    this.$indicator.style.top = offsetY * this.$canvas.height + 'px'
+    this.$indicator.style.left = offsetX * this.$canvas.width + 'px'
   }
 }
 
@@ -88,22 +90,40 @@ class Application {
         this.$viewer.scrollLeft / this.$canvas.width,
         this.$viewer.scrollTop / this.$canvas.height)
     })
+    this.$viewer.addEventListener('dblclick', event => {
+      event.preventDefault()
+      this.canvasContext.beginPath()
+      this.canvasContext.arc(event.offsetX, event.offsetY, Math.random() * 100 + 100, 0, 2 * Math.PI)
+      this.canvasContext.fill()
+      this.thumbnail.draw()
+    })
     this.thumbnail.addEventListener('move', event => {
       this.$viewer.scrollLeft = event.detail.x * this.$canvas.width
       this.$viewer.scrollTop = event.detail.y * this.$canvas.height
     })
+    document.addEventListener('keydown', this.handleKeyboard.bind(this))
+    document.addEventListener('keyup', this.handleKeyboard.bind(this))
+  }
+
+  handleKeyboard(event) {
+    this.ctrlKey = event.ctrlKey
+    if (this.ctrlKey) {
+      this.$canvas.style.cursor = 'default'
+    } else {
+      this.$canvas.style.cursor = 'move'
+    }
   }
 
   /**
    * 绘制默认图像
    */
   draw() {
-    const width = this.$canvas.width / 180
+    const width = this.$canvas.width / 360
     const height = this.$canvas.height / 100
     for (let l = 0; l < 100; l += 1) {
-      for (let h = 0; h < 180; h += 1) {
-        this.canvasContext.fillStyle = `hsl(${h * 2}, 100%, ${l}%)`
-        this.canvasContext.fillRect(h * width, l * width, width, height)
+      for (let h = 0; h < 360; h += 1) {
+        this.canvasContext.fillStyle = `hsl(${h}, 100%, ${l}%)`
+        this.canvasContext.fillRect(h * width, l * height, width, height)
       }
     }
     this.thumbnail.draw()
