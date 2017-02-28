@@ -2,5 +2,26 @@
   width: 1000px;
   height: 600px;
   overflow: auto;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  margin: -300px -500px 0 auto;
+}
+
+.canvas-huge {
   cursor: move;
+}
+
+.thumbnail {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.indicator {
+  border: 1px solid red;
+  position: absolute;
+  cursor: move;
+  top: 0;
+  left: 0;
 }
