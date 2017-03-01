@@ -11,16 +11,10 @@ class Application {
   }
 
   initEventHandler() {
-    this.$viewer.addEventListener('mousedown', event => {
-      this.x = event.x
-      this.y = event.y
-    })
     this.$viewer.addEventListener('mousemove', event => {
       if (event.buttons == 1) {
-        this.$viewer.scrollLeft += this.x - event.x
-        this.$viewer.scrollTop += this.y - event.y
-        this.x = event.x
-        this.y = event.y
+        this.$viewer.scrollLeft -= event.movementX
+        this.$viewer.scrollTop -= event.movementY
       }
     })
     this.$viewer.addEventListener('scroll', () => {

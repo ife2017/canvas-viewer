@@ -28,4 +28,5 @@ body {
   cursor: move;
   top: 0;
   left: 0;
+  box-sizing: border-box;
 }
