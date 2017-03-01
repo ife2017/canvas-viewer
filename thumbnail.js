@@ -4,14 +4,17 @@
 class Thumbnail {
   constructor(canvasContext, scale, $viewer) {
     this.$root = document.querySelector('.thumbnail')
+
     this.$canvas = document.querySelector('.canvas-thumbnail')
     this.$canvas.width = canvasContext.canvas.width * scale
     this.$canvas.height = canvasContext.canvas.height * scale
+
     this.$indicator = document.querySelector('.indicator')
     this.$indicator.style.width = Math.round(
       this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth) + 'px'
     this.$indicator.style.height = Math.round(
       this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight) + 'px'
+
     this.canvasContext = this.$canvas.getContext('2d')
     this.sourceCanvasContext = canvasContext
     this.addEventListener = this.$root.addEventListener.bind(this.$root)
@@ -43,6 +46,15 @@ class Thumbnail {
   updatePosition(event) {
     const left = event.x - this.$root.offsetLeft - this.$indicator.clientWidth / 2
     const top = event.y - this.$root.offsetTop - this.$indicator.clientHeight / 2
+
+    /**
+     * 防止越界
+     */
+    if (top < 0 || top > this.$canvas.height - this.$indicator.clientHeight ||
+        left < 0 || left > this.$canvas.width - this.$indicator.clientWidth) {
+      return
+    }
+
     this.$indicator.style.top = top + 'px'
     this.$indicator.style.left = left + 'px'
 
