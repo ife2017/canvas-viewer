@@ -7,30 +7,21 @@ class Thumbnail {
     this.$canvas = document.querySelector('.canvas-thumbnail')
     this.$canvas.width = canvasContext.canvas.width * scale
     this.$canvas.height = canvasContext.canvas.height * scale
-    this.indicatorWidth = Math.round(
-      this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth)
-    this.indicatorHeight = Math.round(
-      this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight)
     this.$indicator = document.querySelector('.indicator')
-    this.$indicator.style.width = this.indicatorWidth + 'px'
-    this.$indicator.style.height = this.indicatorHeight + 'px'
+    this.$indicator.style.width = Math.round(
+      this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth) + 'px'
+    this.$indicator.style.height = Math.round(
+      this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight) + 'px'
     this.canvasContext = this.$canvas.getContext('2d')
-    this.sourceContext = canvasContext
+    this.sourceCanvasContext = canvasContext
     this.addEventListener = this.$root.addEventListener.bind(this.$root)
     this.initEventHandler()
   }
 
   initEventHandler() {
-    this.$root.addEventListener('mousedown', event => {
-      this.mousedown = true
-      this.updatePosition(event)
-    })
-    this.$root.addEventListener('mouseup', () => {
-      this.mousedown = false
-    })
+    this.$root.addEventListener('mousedown', this.updatePosition.bind(this))
     this.$root.addEventListener('mousemove', event => {
-      console.log(event)
-      if (this.mousedown) {
+      if (event.buttons == 1) {
         this.updatePosition(event)
       }
     })
@@ -41,7 +32,7 @@ class Thumbnail {
    */
   draw() {
     this.canvasContext.drawImage(
-      this.sourceContext.canvas, 0, 0, this.$canvas.width, this.$canvas.height)
+      this.sourceCanvasContext.canvas, 0, 0, this.$canvas.width, this.$canvas.height)
   }
 
   /**
@@ -50,8 +41,8 @@ class Thumbnail {
    * @param event
    */
   updatePosition(event) {
-    const left = event.x - this.$root.offsetLeft - this.indicatorWidth / 2
-    const top = event.y - this.$root.offsetTop - this.indicatorHeight / 2
+    const left = event.x - this.$root.offsetLeft - this.$indicator.clientWidth / 2
+    const top = event.y - this.$root.offsetTop - this.$indicator.clientHeight / 2
     this.$indicator.style.top = top + 'px'
     this.$indicator.style.left = left + 'px'
 
@@ -61,8 +52,8 @@ class Thumbnail {
      *
      * @event move
      * @type {object}
-     * @property {float} x - X 偏移量，取值范围 [0, 1]
-     * @property {float} y - Y 偏移量，取值范围 [0, 1]
+     * @property {number} x - X 偏移量，取值范围 [0, 1]
+     * @property {number} y - Y 偏移量，取值范围 [0, 1]
      */
     this.$root.dispatchEvent(new CustomEvent('move', {
       detail: {
@@ -75,8 +66,8 @@ class Thumbnail {
   /**
    * 从外部设置指示器位置
    *
-   * @param {float} offsetX - X 偏移量，取值范围 [0, 1]
-   * @param {float} offsetY - Y 偏移量，取值范围 [0, 1]
+   * @param {number} offsetX - X 偏移量，取值范围 [0, 1]
+   * @param {number} offsetY - Y 偏移量，取值范围 [0, 1]
    */
   setPosition(offsetX, offsetY) {
     this.$indicator.style.top = offsetY * this.$canvas.height + 'px'

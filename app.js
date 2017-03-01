@@ -12,15 +12,11 @@ class Application {
 
   initEventHandler() {
     this.$viewer.addEventListener('mousedown', event => {
-      this.mousedown = true
       this.x = event.x
       this.y = event.y
     })
-    this.$viewer.addEventListener('mouseup', () => {
-      this.mousedown = false
-    })
     this.$viewer.addEventListener('mousemove', event => {
-      if (this.mousedown) {
+      if (event.buttons == 1) {
         this.$viewer.scrollLeft += this.x - event.x
         this.$viewer.scrollTop += this.y - event.y
         this.x = event.x
@@ -33,7 +29,6 @@ class Application {
         this.$viewer.scrollTop / this.$canvas.height)
     })
     this.$viewer.addEventListener('dblclick', event => {
-      event.preventDefault()
       this.canvasContext.beginPath()
       this.canvasContext.arc(event.offsetX, event.offsetY, Math.random() * 100 + 100, 0, 2 * Math.PI)
       this.canvasContext.fill()
@@ -72,4 +67,4 @@ class Application {
   }
 }
 
-const app = new Application()
+new Application()
