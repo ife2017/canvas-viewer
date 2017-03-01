@@ -24,7 +24,8 @@ class Application {
     })
     this.$viewer.addEventListener('dblclick', event => {
       this.canvasContext.beginPath()
-      this.canvasContext.arc(event.offsetX, event.offsetY, Math.random() * 100 + 100, 0, 2 * Math.PI)
+      this.canvasContext.arc(
+        event.offsetX, event.offsetY, Math.random() * 100 + 100, 0, 2 * Math.PI)
       this.canvasContext.fill()
       this.thumbnail.draw()
     })
@@ -32,17 +33,6 @@ class Application {
       this.$viewer.scrollLeft = event.detail.x * this.$canvas.width
       this.$viewer.scrollTop = event.detail.y * this.$canvas.height
     })
-    document.addEventListener('keydown', this.handleKeyboard.bind(this))
-    document.addEventListener('keyup', this.handleKeyboard.bind(this))
-  }
-
-  handleKeyboard(event) {
-    this.ctrlKey = event.ctrlKey
-    if (this.ctrlKey) {
-      this.$canvas.style.cursor = 'default'
-    } else {
-      this.$canvas.style.cursor = 'move'
-    }
   }
 
   /**
