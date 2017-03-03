@@ -3,12 +3,7 @@ body {
 }
 
 .viewer {
-  width: 1000px;
-  height: 600px;
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  margin: -300px -500px 0 auto;
+  position: relative;
 }
 
 .canvas-viewer {
@@ -17,8 +12,8 @@ body {
 
 .thumbnail {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 8px;
+  right: 8px;
 }
 
 .indicator {
@@ -27,4 +22,17 @@ body {
   top: 0;
   left: 0;
   box-sizing: border-box;
+}
+
+.x-range {
+  width: 1000px;
+}
+
+.y-range {
+  -webkit-appearance: slider-vertical;
+  position: absolute;
+  top: 0;
+  left: 1004px;
+  width: 21px;
+  height: 600px;
 }

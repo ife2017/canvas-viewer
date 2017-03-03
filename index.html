@@ -1,18 +1,21 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>巨型画布</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<p>双击画布可以画出随机圆形</p>
 <div class="viewer">
   <canvas class="canvas-viewer"></canvas>
-  <div class="thumbnail">
-    <canvas class="canvas-thumbnail"></canvas>
-    <div class="indicator"></div>
-  </div>
+  <input class="x-range" type="range" value="0">
+  <input class="y-range" type="range">
 </div>
+<div class="thumbnail">
+  <canvas class="canvas-thumbnail"></canvas>
+  <div class="indicator"></div>
+</div>
+<p>双击画布可以画出随机圆形</p>
 <script src="thumbnail.js"></script>
 <script src="viewer.js"></script>
 <script src="main.js"></script>

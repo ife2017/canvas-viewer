@@ -69,7 +69,11 @@ class Thumbnail {
   }
 
   setPosition(position) {
-    this.$indicator.style.top = position.y * this.$canvas.height + 'px'
-    this.$indicator.style.left = position.x * this.$canvas.width + 'px'
+    if (position.y) {
+      this.$indicator.style.top = position.y * this.$canvas.height + 'px'
+    }
+    if (position.x) {
+      this.$indicator.style.left = position.x * this.$canvas.width + 'px'
+    }
   }
 }
