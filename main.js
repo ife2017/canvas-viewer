@@ -6,7 +6,7 @@ class Main {
     this.canvasContext = this.$canvas.getContext('2d')
     this.viewer = new Viewer(this.$canvas)
     this.thumbnail = new Thumbnail(
-      this.canvasContext, this.viewer.$canvas.width, this.viewer.$canvas.height, 0.02)
+      this.$canvas, this.viewer.$canvas.width, this.viewer.$canvas.height, 0.02)
     this.initEventHandler()
     this.draw()
   }
@@ -20,7 +20,7 @@ class Main {
         Math.random() * 100 + 100, 0, 2 * Math.PI)
       this.canvasContext.fill()
       this.viewer.draw()
-      this.thumbnail.draw()
+      this.thumbnail.draw(this.$canvas)
     })
     this.viewer.addEventListener('move', event => {
       this.thumbnail.setPosition(event.detail)
@@ -43,7 +43,7 @@ class Main {
       }
     }
     this.viewer.draw()
-    this.thumbnail.draw()
+    this.thumbnail.draw(this.$canvas)
   }
 }
 
