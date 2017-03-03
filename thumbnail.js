@@ -11,10 +11,8 @@ class Thumbnail {
     this.$canvas.width = sourceCanvas.width * scale
     this.$canvas.height = sourceCanvas.height * scale
     this.$indicator = document.querySelector('.indicator')
-    this.$indicator.style.width = Math.round(
-      this.$canvas.width / sourceCanvas.width * width) + 'px'
-    this.$indicator.style.height = Math.round(
-      this.$canvas.height / sourceCanvas.height * height) + 'px'
+    this.$indicator.style.width = Math.round(this.$canvas.width / sourceCanvas.width * width) + 'px'
+    this.$indicator.style.height = Math.round(this.$canvas.height / sourceCanvas.height * height) + 'px'
     this.canvasContext = this.$canvas.getContext('2d')
     this.initEventHandler()
   }
