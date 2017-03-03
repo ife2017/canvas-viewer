@@ -2,28 +2,25 @@
  * 缩略图模块
  */
 class Thumbnail {
-  constructor(canvasContext, scale, $viewer) {
-    this.$root = document.querySelector('.thumbnail')
-
+  constructor(sourceCanvasContext, width, height, scale) {
+    this.$thumbnail = document.querySelector('.thumbnail')
     this.$canvas = document.querySelector('.canvas-thumbnail')
-    this.$canvas.width = canvasContext.canvas.width * scale
-    this.$canvas.height = canvasContext.canvas.height * scale
-
+    this.$canvas.width = sourceCanvasContext.canvas.width * scale
+    this.$canvas.height = sourceCanvasContext.canvas.height * scale
     this.$indicator = document.querySelector('.indicator')
     this.$indicator.style.width = Math.round(
-      this.$canvas.width / canvasContext.canvas.width * $viewer.clientWidth) + 'px'
+      this.$canvas.width / sourceCanvasContext.canvas.width * width) + 'px'
     this.$indicator.style.height = Math.round(
-      this.$canvas.height / canvasContext.canvas.height * $viewer.clientHeight) + 'px'
-
+      this.$canvas.height / sourceCanvasContext.canvas.height * height) + 'px'
+    this.sourceCanvasContext = sourceCanvasContext
     this.canvasContext = this.$canvas.getContext('2d')
-    this.sourceCanvasContext = canvasContext
-    this.addEventListener = this.$root.addEventListener.bind(this.$root)
     this.initEventHandler()
   }
 
   initEventHandler() {
-    this.$root.addEventListener('mousedown', this.updatePosition.bind(this))
-    this.$root.addEventListener('mousemove', event => {
+    this.addEventListener = this.$thumbnail.addEventListener.bind(this.$thumbnail)
+    this.$thumbnail.addEventListener('mousedown', this.updatePosition.bind(this))
+    this.$thumbnail.addEventListener('mousemove', event => {
       if (event.buttons == 1) {
         this.updatePosition(event)
       }
@@ -33,7 +30,7 @@ class Thumbnail {
   /**
    * 更新缩略图
    */
-  draw() {
+  draw(canvas) {
     this.canvasContext.drawImage(
       this.sourceCanvasContext.canvas, 0, 0, this.$canvas.width, this.$canvas.height)
   }
@@ -44,12 +41,10 @@ class Thumbnail {
    * @param event
    */
   updatePosition(event) {
-    const left = event.x - this.$root.offsetLeft - this.$indicator.clientWidth / 2
-    const top = event.y - this.$root.offsetTop - this.$indicator.clientHeight / 2
+    const left = event.x - this.$thumbnail.offsetLeft - this.$indicator.clientWidth / 2
+    const top = event.y - this.$thumbnail.offsetTop - this.$indicator.clientHeight / 2
 
-    /**
-     * 防止越界
-     */
+    // 防止越界
     if (top < 0 || top > this.$canvas.height - this.$indicator.clientHeight ||
         left < 0 || left > this.$canvas.width - this.$indicator.clientWidth) {
       return
@@ -59,7 +54,7 @@ class Thumbnail {
     this.$indicator.style.left = left + 'px'
 
     /**
-     * 触发移动事件，调用者可以通过 addEventListener 监听 move 事件
+     * 分发移动事件，调用者可以通过 addEventListener 监听 move 事件
      * 然后通过 event.detail 得到移动的位置
      *
      * @event move
@@ -67,7 +62,7 @@ class Thumbnail {
      * @property {number} x - X 偏移量，取值范围 [0, 1]
      * @property {number} y - Y 偏移量，取值范围 [0, 1]
      */
-    this.$root.dispatchEvent(new CustomEvent('move', {
+    this.$thumbnail.dispatchEvent(new CustomEvent('move', {
       detail: {
         x: left / this.$canvas.width,
         y: top / this.$canvas.height,
@@ -75,14 +70,8 @@ class Thumbnail {
     }))
   }
 
-  /**
-   * 从外部设置指示器位置
-   *
-   * @param {number} offsetX - X 偏移量，取值范围 [0, 1]
-   * @param {number} offsetY - Y 偏移量，取值范围 [0, 1]
-   */
-  setPosition(offsetX, offsetY) {
-    this.$indicator.style.top = offsetY * this.$canvas.height + 'px'
-    this.$indicator.style.left = offsetX * this.$canvas.width + 'px'
+  setPosition(position) {
+    this.$indicator.style.top = position.y * this.$canvas.height + 'px'
+    this.$indicator.style.left = position.x * this.$canvas.width + 'px'
   }
 }

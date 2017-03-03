@@ -1,37 +1,32 @@
 class Application {
   constructor() {
-    this.$canvas = document.querySelector('.canvas-huge')
+    this.$canvas = document.createElement('canvas')
     this.$canvas.width = 18000
     this.$canvas.height = 10000
     this.canvasContext = this.$canvas.getContext('2d')
-    this.$viewer = document.querySelector('.viewer')
-    this.thumbnail = new Thumbnail(this.canvasContext, 0.02, this.$viewer)
+    this.viewer = new Viewer(this.$canvas)
+    this.thumbnail = new Thumbnail(
+      this.canvasContext, this.viewer.$canvas.width, this.viewer.$canvas.height, 0.02)
     this.initEventHandler()
     this.draw()
   }
 
   initEventHandler() {
-    this.$viewer.addEventListener('mousemove', event => {
-      if (event.buttons == 1) {
-        this.$viewer.scrollLeft -= event.movementX
-        this.$viewer.scrollTop -= event.movementY
-      }
-    })
-    this.$viewer.addEventListener('scroll', () => {
-      this.thumbnail.setPosition(
-        this.$viewer.scrollLeft / this.$canvas.width,
-        this.$viewer.scrollTop / this.$canvas.height)
-    })
-    this.$viewer.addEventListener('dblclick', event => {
+    this.viewer.addEventListener('dblclick', event => {
       this.canvasContext.beginPath()
       this.canvasContext.arc(
-        event.offsetX, event.offsetY, Math.random() * 100 + 100, 0, 2 * Math.PI)
+        this.viewer.x + event.offsetX,
+        this.viewer.y + event.offsetY,
+        Math.random() * 100 + 100, 0, 2 * Math.PI)
       this.canvasContext.fill()
+      this.viewer.draw()
       this.thumbnail.draw()
     })
+    this.viewer.addEventListener('move', event => {
+      this.thumbnail.setPosition(event.detail)
+    })
     this.thumbnail.addEventListener('move', event => {
-      this.$viewer.scrollLeft = event.detail.x * this.$canvas.width
-      this.$viewer.scrollTop = event.detail.y * this.$canvas.height
+      this.viewer.setPosition(event.detail)
     })
   }
 
@@ -47,6 +42,7 @@ class Application {
         this.canvasContext.fillRect(h * width, l * height, width, height)
       }
     }
+    this.viewer.draw()
     this.thumbnail.draw()
   }
 }

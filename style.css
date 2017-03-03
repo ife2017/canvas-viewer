@@ -5,15 +5,14 @@ body {
 .viewer {
   width: 1000px;
   height: 600px;
-  overflow: auto;
   position: absolute;
   top: 50%;
   right: 50%;
   margin: -300px -500px 0 auto;
 }
 
-.canvas-huge {
-  cursor: move;
+.canvas-viewer {
+  cursor: -webkit-grab;
 }
 
 .thumbnail {
@@ -25,7 +24,6 @@ body {
 .indicator {
   border: 1px solid red;
   position: absolute;
-  cursor: move;
   top: 0;
   left: 0;
   box-sizing: border-box;
