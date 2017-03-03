@@ -41,15 +41,13 @@ class Thumbnail {
    * @param event
    */
   updatePosition(event) {
-    const left = event.x - this.$thumbnail.offsetLeft - this.$indicator.clientWidth / 2
-    const top = event.y - this.$thumbnail.offsetTop - this.$indicator.clientHeight / 2
-
-    // 防止越界
-    if (top < 0 || top > this.$canvas.height - this.$indicator.clientHeight ||
-        left < 0 || left > this.$canvas.width - this.$indicator.clientWidth) {
-      return
-    }
-
+    const rect = this.$thumbnail.getBoundingClientRect()
+    const top = Math.min(
+      Math.max(event.y - rect.top - this.$indicator.clientHeight / 2, 0),
+      this.$canvas.height - this.$indicator.clientHeight - 2)
+    const left = Math.min(
+      Math.max(event.x - rect.left - this.$indicator.clientWidth / 2, 0),
+      this.$canvas.width - this.$indicator.clientWidth - 2)
     this.$indicator.style.top = top + 'px'
     this.$indicator.style.left = left + 'px'
 

@@ -1,8 +1,8 @@
-class Application {
+class Main {
   constructor() {
     this.$canvas = document.createElement('canvas')
-    this.$canvas.width = 18000
-    this.$canvas.height = 10000
+    this.$canvas.width = 9000
+    this.$canvas.height = 5000
     this.canvasContext = this.$canvas.getContext('2d')
     this.viewer = new Viewer(this.$canvas)
     this.thumbnail = new Thumbnail(
@@ -47,4 +47,4 @@ class Application {
   }
 }
 
-new Application()
+new Main()

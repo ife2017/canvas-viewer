@@ -4,8 +4,8 @@ class Viewer {
     this.y = 0
     this.$viewer = document.querySelector('.viewer')
     this.$canvas = document.querySelector('.canvas-viewer')
-    this.$canvas.width = this.$viewer.clientWidth
-    this.$canvas.height = this.$viewer.clientHeight
+    this.$canvas.width = 1000
+    this.$canvas.height = 600
     this.canvasContext = this.$canvas.getContext('2d')
     this.sourceCanvas = sourceCanvas
     this.initEventHandler()
@@ -14,16 +14,18 @@ class Viewer {
   initEventHandler() {
     this.addEventListener = this.$viewer.addEventListener.bind(this.$viewer)
     this.$canvas.addEventListener('mousedown', () => {
+      this.mousedown = true
       this.$canvas.style.cursor = '-webkit-grabbing'
     })
     this.$canvas.addEventListener('mouseup', () => {
+      this.mousedown = false
       this.$canvas.style.cursor = '-webkit-grab'
     })
     this.$canvas.addEventListener('mousemove', this.updatePosition.bind(this))
   }
 
   updatePosition(event) {
-    if (event.buttons == 1) {
+    if (this.mousedown && event.buttons == 1) {
       this.x -= event.movementX / devicePixelRatio
       this.y -= event.movementY / devicePixelRatio
       this.x = Math.min(Math.max(this.x, 0), this.sourceCanvas.width - this.$canvas.width)
